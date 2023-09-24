@@ -39,7 +39,7 @@ module.exports.dataForContest = async (req, res, next) => {
 module.exports.getContestById = async (req, res, next) => {
   try {
     let contestInfo = await db.Contests.findOne({
-      where: { id: req.headers.contestid },
+      where: { id: req.query.contestId },
       order: [
         [db.Offers, 'id', 'asc'],
       ],
@@ -93,6 +93,8 @@ module.exports.getContestById = async (req, res, next) => {
       }
       delete offer.Rating;
     });
+    // contestInfo = {...contestInfo, params: req.params, query: req.query};
+    // console.log(req);
     res.send(contestInfo);
   } catch (e) {
     next(new ServerError());
