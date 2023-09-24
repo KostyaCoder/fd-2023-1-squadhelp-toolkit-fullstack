@@ -242,18 +242,18 @@ module.exports.getCustomersContests = (req, res, next) => {
 };
 
 module.exports.getContests = (req, res, next) => {
-  const predicates = UtilFunctions.createWhereForAllContests(req.body.typeIndex,
-    req.body.contestId, req.body.industry, req.body.awardSort);
+  const predicates = UtilFunctions.createWhereForAllContests(req.params.typeIndex,
+    req.params.contestId, req.params.industry, req.params.awardSort);
   db.Contests.findAll({
     where: predicates.where,
     order: predicates.order,
-    limit: req.body.limit,
-    offset: req.body.offset ? req.body.offset : 0,
+    limit: req.params.limit,
+    offset: req.params.offset ? req.params.offset : 0,
     include: [
       {
         model: db.Offers,
-        required: req.body.ownEntries,
-        where: req.body.ownEntries ? { userId: req.tokenData.userId } : {},
+        required: req.params.ownEntries,
+        where: req.params.ownEntries ? { userId: req.tokenData.userId } : {},
         attributes: ['id'],
       },
     ],
