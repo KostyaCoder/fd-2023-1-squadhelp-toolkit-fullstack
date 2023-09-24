@@ -217,30 +217,35 @@ module.exports.setOfferStatus = async (req, res, next) => {
   }
 };
 
-module.exports.getCustomersContests = (req, res, next) => {
-  db.Contests.findAll({
-    where: { status: req.headers.status, userId: req.tokenData.userId },
-    limit: req.params.limit,
-    offset: req.params.offset ? req.params.offset : 0,
-    order: [['id', 'DESC']],
-    include: [
-      {
-        model: db.Offers,
-        required: false,
-        attributes: ['id'],
-      },
-    ],
-  })
-    .then(contests => {
-      contests.forEach(
-        contest => contest.dataValues.count = contest.dataValues.Offers.length);
-      let haveMore = true;
-      if (contests.length === 0) {
-        haveMore = false;
-      }
-      res.send({ contests, haveMore });
-    })
-    .catch(err => next(new ServerError(err)));
+module.exports.getCustomersContests = async (req, res, next) => {
+  try {
+    const contests = await db.Contests.findAll({
+      where: { status: req.headers.status, userId: req.tokenData.userId },
+      limit: req.params.limit,
+      offset: req.params.offset ? req.params.offset : 0,
+      order: [['id', 'DESC']],
+      include: [
+        {
+          model: db.Offers,
+          required: false,
+          attributes: ['id'],
+        },
+      ],
+    });
+      
+    contests.forEach( 
+      contest => contest.dataValues.count = contest.dataValues.Offers.length
+      );
+
+    let haveMore = true;
+    if (contests.length === 0) {
+      haveMore = false;
+    }
+    res.send({ contests, haveMore });
+
+  } catch (err) {
+    next(new ServerError(err));    
+  }
 };
 
 module.exports.getContests = (req, res, next) => {
