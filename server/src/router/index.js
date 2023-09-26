@@ -70,7 +70,7 @@ router.get(
 );
 
 router.put(
-  '/updateContest',
+  '/updateContest/:contestId',
   checkToken.checkToken,
   upload.updateContestFile,
   contestController.updateContest,

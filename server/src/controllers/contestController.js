@@ -111,12 +111,15 @@ module.exports.downloadFile = async (req, res, next) => {
 };
 
 module.exports.updateContest = async (req, res, next) => {
+  const {
+    params: { contestId }
+  } = req;
+
   if (req.file) {
     req.body.fileName = req.file.filename;
     req.body.originalFileName = req.file.originalname;
-  }
-  const contestId = req.body.contestId;
-  delete req.body.contestId;
+  };
+
   try {
     const updatedContest = await contestQueries.updateContest(req.body, {
       id: contestId,
