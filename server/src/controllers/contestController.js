@@ -221,7 +221,7 @@ module.exports.getCustomersContests = async (req, res, next) => {
   const {
     headers : { status }, 
     tokenData : { userId },
-    params : { limit, offset }
+    query : { limit, offset }
   } = req;
 
   try {
