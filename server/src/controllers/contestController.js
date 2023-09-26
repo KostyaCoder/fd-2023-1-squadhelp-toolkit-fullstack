@@ -37,9 +37,14 @@ module.exports.dataForContest = async (req, res, next) => {
 };
 
 module.exports.getContestById = async (req, res, next) => {
+  const {
+    query: { contestId },
+    tokenData: { role, userId }
+  } = req;
+
   try {
     let contestInfo = await db.Contests.findOne({
-      where: { id: req.query.contestId },
+      where: { id: contestId },
       order: [
         [db.Offers, 'id', 'asc'],
       ],
@@ -59,8 +64,8 @@ module.exports.getContestById = async (req, res, next) => {
         {
           model: db.Offers,
           required: false,
-          where: req.tokenData.role === CONSTANTS.CREATOR
-            ? { userId: req.tokenData.userId }
+          where: role === CONSTANTS.CREATOR
+            ? { userId }
             : {},
           attributes: { exclude: ['userId', 'contestId'] },
           include: [
@@ -79,7 +84,7 @@ module.exports.getContestById = async (req, res, next) => {
             {
               model: db.Ratings,
               required: false,
-              where: { userId: req.tokenData.userId },
+              where: { userId },
               attributes: { exclude: ['userId', 'offerId'] },
             },
           ],
