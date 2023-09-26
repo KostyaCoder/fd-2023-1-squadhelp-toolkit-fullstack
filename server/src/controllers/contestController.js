@@ -254,7 +254,7 @@ module.exports.getCustomersContests = async (req, res, next) => {
 module.exports.getContests = (req, res, next) => {
   const {
     tokenData: { userId },
-    params: { typeIndex, contestId, industry, awardSort, limit, offset, ownEntries}
+    query: { typeIndex, contestId, industry, awardSort, limit, offset, ownEntries}
   } = req;
 
   const predicates = UtilFunctions.createWhereForAllContests(typeIndex,     contestId, industry, awardSort);
