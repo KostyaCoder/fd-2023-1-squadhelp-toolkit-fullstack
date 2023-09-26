@@ -93,8 +93,7 @@ module.exports.getContestById = async (req, res, next) => {
       }
       delete offer.Rating;
     });
-    // contestInfo = {...contestInfo, params: req.params, query: req.query};
-    // console.log(req);
+
     res.send(contestInfo);
   } catch (e) {
     next(new ServerError());
